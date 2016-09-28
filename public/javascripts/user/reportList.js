@@ -48,6 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             alert(data.message);
                         } else {
                             app.showNotice("提交成功");
+                            self.reports[index].status = 1;
                         }
                     });
                 }

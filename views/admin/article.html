@@ -1,14 +1,16 @@
 {% extends "template/layout.html" %}
 
 {% block js %}
-<script>
+<!--<script>
 var data = {{ data | dump | safe }};
-</script>
+</script>-->
 <script src="/javascripts/admin/article.js"></script>
+<script src="/javascripts/summernote.min.js"></script>
 {% endblock %}
 
 {% block css %}
 <link rel="stylesheet" href="/stylesheets/admin/article.css">
+<link rel="stylesheet" href="/stylesheets/summernote.css">
 {% endblock %}
 
 {% block content %}
@@ -16,7 +18,24 @@ var data = {{ data | dump | safe }};
 <h2>文章管理</h2>
 <hr />
 <div id="app" v-on:submit.prevent>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <label for="article" class="col-sm-2  control-label">选择页面</label>
+            <div class="col-sm-10">
+                <select class="form-control" id="article" v-model="table.article">
+                    <option value="0">文章</option>
+                    <option value="1">介绍</option>
+                    <option value="2">规则</option>
+                </select>
+            </div>
+        </div>
+    </form>
+    <div class="form-group">
+        <input type="text" class="form-control" id="title" v-model="table.title" placeholder="文章标题">
+    </div>
     <form>
+        <div id="note"></div>
+        <button :disabled="disable" type="submit" class="btn btn-primary form-control" v-on:click="updateArticle()">保存</button>
     </form>
 </div>
 {% endraw %}

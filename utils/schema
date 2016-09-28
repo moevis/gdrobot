@@ -1,0 +1,57 @@
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE user (
+	id integer primary key autoincrement,
+	name varchar(32),
+	email varchar(32),
+	phone varchar(16),
+	password char(32),
+	wx varchar(32),
+	role int default 0,
+	created timestamp default CURRENT_TIMESTAMP
+);
+create index user_email on user(email);
+INSERT INTO "user" VALUES(1,'','moevery@gmail.com','','670b14728ad9902aecba32e22fa4f6bd',NULL,1,'2016-09-28 07:51:17');
+INSERT INTO "user" VALUES(2,NULL,'moevery@163.com',NULL,'670b14728ad9902aecba32e22fa4f6bd',NULL,0,'2016-09-28 07:51:17');
+CREATE TABLE report (
+	id integer primary key autoincrement,
+	schoolName varchar(64),
+	teamName varchar(64),
+	entry integer,
+	topic varchar(64),
+	address varchar(255),
+	userId integer,
+	teachers varchar(1024) default "[]",
+	students varchar(1024) default "[]",
+	status integer default 0,
+	created timestamp default CURRENT_TIMESTAMP
+);
+create index report_id_userId on (id, userId);
+create index report_status on report(status);
+create index report_created on report(created);
+CREATE TABLE notice (
+	id integer primary key autoincrement,
+	userId integer,
+	content varchar(500),
+	status integer default 0,
+	created timestamp default CURRENT_TIMESTAMP
+);
+CREATE TABLE article (
+	id integer primary key autoincrement,
+	title varchar(128),
+	content text,
+	created timestamp default CURRENT_TIMESTAMP
+);
+INSERT INTO "article" VALUES(0,'title','content','2016-09-28 07:51:18');
+INSERT INTO "article" VALUES(1,'2016年广东省机器人大赛暨机器人技术研讨会','<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;为促进机器人技术创新和人才培养，推动机器人产业发展，广东省计算机学会智能软件与机器人分会将于2016年12月23-24日在广州举行2016年广东省机器人大赛暨机器人技术研讨会。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;研讨会将邀请机器人学术界专家和产业界人士做机器人主题报告。机器人竞赛项目包括(1)接力机器人竞赛；(2)创意机器人竞赛;(3)无人驾驶车仿真竞赛。本次大赛无需报名费，参赛队人员食宿费用自理。竞赛规则、大赛正式通知将在大赛官方网站 <span style="color: rgb(0, 0, 0); font-family: Lato, &quot;Helvetica Neue&quot;, Helvetica, Arial, sans-serif; font-size: 15px; font-style: normal; font-variant-ligatures: normal; font-variant-caps: normal; font-weight: normal; letter-spacing: normal; orphans: 2; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 2; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255); display: inline !important; float: none;"><span class="Apple-converted-space">&nbsp;</span></span><a href="http://gdrobot.hqsmartbot.com">http://gdrobot.hqsmartbot.com</a> &nbsp;公布。</p><p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;报名截止日期2016年10月30日。</p>','2016-09-28 07:51:18');
+INSERT INTO "article" VALUES(2,'title','contentfds','2016-09-28 07:51:18');
+CREATE TABLE option (
+	key varchar(32) primary key,
+	value varchar(128) 
+);
+INSERT INTO "option" VALUES('START_DATE','2012-12-12 22:22:22');
+INSERT INTO "option" VALUES('END_DATE','2023-12-12 22:22:22');
+DELETE FROM sqlite_sequence;
+INSERT INTO "sqlite_sequence" VALUES('user',2);
+INSERT INTO "sqlite_sequence" VALUES('article',2);
+COMMIT;

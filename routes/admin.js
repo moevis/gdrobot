@@ -6,7 +6,7 @@ var async = require('async');
 /* GET admin listing. */
 router.get('/', function(req, res, next) {
 
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
     async.parallel([
@@ -54,7 +54,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/option/add', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.json({error: true, message: "未登陆或没权限"});
 	}
     var key = req.body.key;
@@ -73,7 +73,7 @@ router.post('/option/add', function(req, res, next) {
 });
 
 router.post('/option/update', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.json({error: true, message: "未登陆或没权限"});
 	}
     var key = req.body.key;
@@ -89,7 +89,7 @@ router.post('/option/update', function(req, res, next) {
 });
 
 router.post('/option/remove', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.json({error: true, message: "未登陆或没权限"});
 	}
     var key = req.body.key;
@@ -104,7 +104,7 @@ router.post('/option/remove', function(req, res, next) {
 });
 
 router.get('/reportList', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
     res.render('admin/reportList', { user: req.session.user});
@@ -112,24 +112,43 @@ router.get('/reportList', function(req, res, next) {
 
 
 router.get('/userManage', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
     res.render('admin/userManage', { user: req.session.user});
 });
 
 router.get('/article', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
     res.render('admin/article', { user: req.session.user});
 });
 
-router.post('/article', function(req, res, next) {
-	if (!req.session.user && req.session.user.role != 1) {
+router.get('/article/:id', function(req, res, next) {
+    db.get('select * from article where id=?', req.params.id, function(err, data) {
+        if (!err) {
+            res.json({error: false, result: data});
+        } else {
+            res.json({ error:true, message: error});
+        }
+    });
+});
+
+router.post('/article/:id', function(req, res, next) {
+	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
-    res.render('admin/article', { user: req.session.user});
+    var id = req.params.id;
+    var title = req.body.title;
+    var content = req.body.content;
+    db.run('update article set title=?, content=? where id=?', title, content, id, function(err) {
+        if (!err) {
+            res.json({error: false});
+        } else {
+            res.json({error: true, message: err});
+        }
+    });
 });
 
 

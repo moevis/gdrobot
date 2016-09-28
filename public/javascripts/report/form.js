@@ -85,15 +85,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    if (report) {
+    if (report.status !== undefined) {
         app.studentList = JSON.parse(report.students) || [];
         app.teacherList = JSON.parse(report.teachers) || [];
         delete report.students;
         delete report.teachers;
         app.table = report;
         if (app.table.status != 0) {
-            app.show1 = false;
-            app.show2 = false;
+            app.$set('show1', false);
+            app.$set('show2', false);
         }
     } else {
         app.table.status = 0;

@@ -64,7 +64,10 @@ router.post('/password', function (req, res, next) {
 	if (oldPassword != req.session.user.password) {
 		return res.json({error: true, message: "密码错误"});
 	}
-	var password = md5(req.body.newPassword || '');
+	if (! req.body.newPassword || !req.body.newPassword.length || req.body.newPassword.length < 6) {
+		return res.json({error: true, message: "密码太短，请重新输入。"});
+	}
+	var password = md5(req.body.newPassword);
 	db.run('update user set password=? where id=?', password, req.session.user.id, function(err) {
 		if (!err) {
 			return res.json({error: false});

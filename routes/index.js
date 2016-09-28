@@ -1,9 +1,12 @@
 var express = require('express');
 var router = express.Router();
+var db = require('../utils/db');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { user: req.session.user });
+    db.get('select * from article where id=?', 1, function(err, data) {
+        res.render('page', { user: req.session.user, page: data});
+    });
 });
 
 router.get('/needLogin', function(req, res, next) {
