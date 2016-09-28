@@ -1,3 +1,8 @@
+drop table article;
+drop table notice;
+drop table option;
+drop table report;
+drop table user;
 create table user (
 	id integer primary key autoincrement,
 	name varchar(32),
@@ -20,8 +25,8 @@ create table report (
 	topic varchar(64),
 	address varchar(255),
 	userId integer,
-	teachers varchar(255) default "[]",
-	students varchar(255) default "[]",
+	teachers varchar(1024) default "[]",
+	students varchar(1024) default "[]",
 	status integer default 0,
 	created timestamp default CURRENT_TIMESTAMP
 );
@@ -36,6 +41,7 @@ create table notice (
 
 create table article (
 	id integer primary key autoincrement,
+	title varchar(128),
 	content text,
 	created timestamp default CURRENT_TIMESTAMP
 );
@@ -45,5 +51,9 @@ create table option (
 	value varchar(128) 
 );
 
-insert into option(key, value) values('START_DATE', '2022-12-12 22:22:22');
+insert into option(key, value) values('START_DATE', '2012-12-12 22:22:22');
 insert into option(key, value) values('END_DATE', '2023-12-12 22:22:22');
+
+insert into article(id, title, content) values(0, 'title', 'content');
+insert into article(id, title, content) values(1, 'title', 'content');
+insert into article(id, title, content) values(2, 'title', 'content');
