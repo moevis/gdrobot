@@ -8,7 +8,6 @@ var nunjucks = require('nunjucks');
 var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
-
 var config = require('./utils/global');
 
 var routes = require('./routes/index');
