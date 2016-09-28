@@ -126,6 +126,9 @@ router.get('/article', function(req, res, next) {
 });
 
 router.get('/article/:id', function(req, res, next) {
+    if (!req.session.user || req.session.user.role != 1) {
+	return res.json({error: true, message: "未登陆或没权限"});
+    }
     db.get('select * from article where id=?', req.params.id, function(err, data) {
         if (!err) {
             res.json({error: false, result: data});
