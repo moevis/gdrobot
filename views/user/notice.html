@@ -1,0 +1,30 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script src="/javascripts/user/notice.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/user/notice.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>通知</h2>
+<hr />
+<form id="app" v-on:submit.prevent>
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {{ message }}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">通知<button type="button" class="pull-right btn btn-default btn-xs">删除</button></div>
+        <div class="panel-body">
+            内容
+            <span class="pull-right">time</span>
+        </div>
+        </div>
+    </div>
+</form>
+{% endraw %}
+{% endblock %}

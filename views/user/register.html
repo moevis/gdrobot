@@ -1,0 +1,46 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script src="/javascripts/user/register.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/user/register.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>注册账号</h2>
+<hr />
+<form id="app" v-on:submit.prevent>
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {{ message }}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+    <!--<div class="form-group">
+        <label for="name">姓名</label>
+        <input type="text" class="form-control" id="name" v-model="table.name" placeholder="如何称呼您">
+    </div>-->
+    <div class="form-group">
+        <label for="email">邮箱</label>
+        <input type="email" class="form-control" id="email" v-model="table.email" placeholder="邮箱将用来发送通知">
+    </div>
+    <!--<div class="form-group">
+        <label for="phone">电话</label>
+        <input type="email" class="form-control" id="phone" v-model="table.phone" placeholder="我们可能会通过短信通知比赛信息">
+    </div>-->
+    <div class="form-group">
+        <label for="password">密码</label>
+        <input type="password" class="form-control" id="password" v-model="table.password" placeholder="密码">
+    </div>
+    <div class="form-group">
+        <label for="password2">确认密码</label>
+        <input type="password" class="form-control" id="password2" v-model="table.password2" placeholder="密码">
+    </div>
+    <div class="form-group">
+        <button type="submit" :disabled="disable" class="btn btn-default btn-primary" v-on:click="submit()">注册账号</button> <a type="submit" href="/user/login" class="btn btn-default">登陆</a>
+    </div>
+</form>
+
+{% endraw %}
+{% endblock %}

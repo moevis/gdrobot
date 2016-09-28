@@ -1,0 +1,25 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script>
+var data = {{ data | dump | safe }};
+</script>
+<script src="/javascripts/admin/article.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/admin/article.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>文章管理</h2>
+<hr />
+<div id="app" v-on:submit.prevent>
+    <form>
+    </form>
+</div>
+{% endraw %}
+{% endblock %}
+
+<!-- Split button -->

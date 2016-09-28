@@ -1,0 +1,81 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script>
+    var reports = {{ reportList | dump | safe}};
+</script>
+<script src="/javascripts/user/reportList.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/user/reportList.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>我的报名表</h2>
+<hr />
+<div class="well">报名截止日期 2016年10月30号，请在截止日期前提交报名表，提交后将无法修改。</div>
+<form id="app" v-on:submit.prevent>
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {{ message }}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+    <p v-if="reports.length == 0">您还未提交报名表，<a href="/report/form" type="button" class="btn btn-primary">去填写</a></p>
+    <table class="table table-bordered" v-if="reports.length > 0">
+        <thead>
+            <tr>
+                <th class="hidden-xs">编号</th>
+                <th class="col-xs-2">队名</th>
+                <th class="col-xs-4">项目</th>
+                <th class="col-xs-3 hidden-xs">学生</th>
+                <th class="col-xs-1">状态</th>
+                <th class="col-xs-1">操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="report in reports">
+                <td class="hidden-xs">{{ report.id }}</td>
+                <td class="col-xs-2">{{ report.teamName }}</td>
+                <td class="col-xs-4">{{ entry[report.entry] }}</td>
+                <td class="col-xs-3 hidden-xs">{{ parseStudents(report.students) }}</td>
+                <td class="col-xs-1">
+                    <a v-if="report.status == 0" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-question-sign"></span></a>
+                    <a v-if="report.status == 1" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-check"></span></a>
+                    <a v-if="report.status == 2" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-exclamation-sign"></span></a>
+                    <a v-if="report.status == 3" type="button" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-ok-circle"></span></a>
+                </td>
+                <td class="col-xs-1">
+                    <!--<a v-if="report.status == 0" type="button" class="btn btn-default btn-sm" href="/report/{{report.id}}"></a>
+                    <a v-if="report.status == 0" type="button" class="btn btn-primary btn-sm"></a>
+                    <a v-if="report.status == 0" type="button" class="btn btn-danger btn-sm"><div class="glyphicon glyphicon-trash"></div></a>-->
+                    <div class="btn-group" v-if="report.status == 0">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            操作 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="/report/{{report.id}}/form"><span class="glyphicon glyphicon-pencil"></span>　修改/查看</a></li>
+                            <li><a href="#" v-on:click="submit($index)"><span class="glyphicon glyphicon-cloud-upload"></span>　提交(将无法更改)</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="#" v-on:click="deleteReport(report.id)"><span class="glyphicon glyphicon-trash"></span>　删除</a></li>
+                        </ul>
+                    </div>
+                    <div class="btn-group" v-else>
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            已提交 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a href="/report/{{report.id}}/form"><span class="glyphicon glyphicon-view"></span> 查看</a></li>
+                        </ul>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    </div>
+</form>
+{% endraw %}
+{% endblock %}
+
+<!-- Split button -->

@@ -1,0 +1,89 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script>
+
+</script>
+<script src="/javascripts/admin/reportList.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/admin/reportList.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>报名管理</h2>
+<hr />
+<div id="app" v-on:submit.prevent>
+
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse">
+        <div class="navbar-header">
+        <a class="navbar-brand" href="#">搜索</a>
+        </div>
+      <form class="navbar-form navbar-left">
+        <div class="form-group">
+          <input type="date" class="form-control" v-model="table.date" placeholder="注册时间">
+        </div>
+        <div class="form-group">
+            <select class="form-control" id="entry" v-model="table.status">
+                <option value="0">未提交</option>
+                <option value="1">已提交</option>
+                <option value="2">已通过</option>
+                <option value="3">未通过</option>
+                <option value="4">已失效</option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-default"  v-on:click="search(true)">Search</button>
+      </form>
+      </ul>
+      
+    </div><!-- /.navbar-collapse -->
+  </div><!-- /.container-fluid -->
+</nav>
+<div class="well">结果数: <span>{{count}}</span>，页数 <span>{{Math.ceil(count/limit)}}</span></div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>学校</th>
+            <th>队名</th>
+            <th>项目</th>
+            <th>提交日期</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="r in list">
+            <td>{{ r.id }}</td>
+            <td>{{ r.schoolName }}</td>
+            <td>{{ r.teamName }}</td>
+            <td>{{ entry[r.entry] }}</td>
+            <td>{{ r.created }}</td>
+            <td>{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][r.status] }}</td>
+            <td>
+                <button class="btn btn-default btn-xs" type="button">查看</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+<nav>
+  <ul class="pagination">
+    <li v-for="n in Math.ceil(count/limit)"><a href="changePage($index)">{{$index+1}}</a></li>
+  </ul>
+</nav>
+
+
+
+</div>
+{% endraw %}
+{% endblock %}
+
+<!-- Split button -->

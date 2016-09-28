@@ -1,0 +1,51 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script src="/javascripts/user/profile.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/user/profile.css">
+{% endblock %}
+
+{% block content %}
+
+<h2>个人信息</h2>
+<hr />
+<form id="app" v-on:submit.prevent>
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {% raw %}{{ message }}{% endraw %}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+    <div class="form-group">
+        <label for="name">姓名</label>
+        <input type="text" class="form-control" id="name" v-model="table.name" placeholder="如何称呼您" value="{{ user.name }}">
+    </div>
+    <div class="form-group">
+        <label for="email">邮箱（不可修改）</label>
+        <input type="email" class="form-control" id="email" v-model="table.email" placeholder="邮箱" readonly value="{{ user.email }}">
+    </div>
+    <div class="form-group">
+        <label for="phone">手机号</label>
+        <input type="text" class="form-control" id="phone" v-model="table.phone" placeholder="我们可能会通过短信通知比赛信息" value="{{ user.phone }}">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default btn-primary" v-on:click="submitProfile()" :disabled="disable">提交修改</button>
+    </div>
+
+    <h3>修改密码</h3>
+    <hr />
+    <div class="form-group">
+        <label for="passowrd">原密码</label>
+        <input type="password" class="form-control" id="passowrd" v-model="table.password" placeholder="密码">
+    </div>
+    <div class="form-group">
+        <label for="newPassowrd">新密码</label>
+        <input type="password" class="form-control" id="newPassowrd" v-model="table.newPassword" placeholder="密码">
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-default btn-primary" v-on:click="submitPassword()" :disabled="disable">修改密码</button>
+    </div>
+</form>
+
+{% endblock %}

@@ -1,0 +1,192 @@
+{% set curr="report" %}
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script>
+    var report = {{ form | dump | safe}};
+</script>
+<script src="/javascripts/report/form.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/report/form.css">
+{% endblock %}
+
+{% block content %}
+
+{% if not user%}
+{% include "template/goToLogin.html" %}
+{% endif %}
+
+{% raw %}
+<h2 class="text-center">2016年广东省机器人大赛暨机器人技术研讨会</h2>
+<h3 class="text-center">报名表</h3>
+<hr />
+<div id="app">
+    
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {{ message }}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
+
+  <div class="form-group">
+    <label for="schoolName">学校名称及院系</label>
+    <input type="text" class="form-control" id="schoolName" placeholder="例如：华南理工大学软件学院" v-model="table.schoolName">
+  </div>
+
+  <div class="form-group">
+    <label for="teamName">参赛队名</label>
+    <input type="text" class="form-control" id="teamName" placeholder="例如：华南百步梯" v-model="table.teamName">
+  </div>
+
+  <div class="form-group">
+    <label for="entry">参赛项目</label>
+    <select class="form-control" id="entry" v-model="table.entry">
+        <option value="1">接力机器人竞赛（本科院校组）</option>
+        <option value="2">接力机器人竞赛（高职高专组）</option>
+        <option value="3">创意机器人竞赛</option>
+        <option value="4">无人驾驶车竞赛（基础竞速）</option>
+        <option value="5">无人驾驶车竞赛（高级竞速）</option>
+        <option value="6">无人驾驶车竞赛（跟车）</option>
+        <option value="7">无人驾驶车竞赛（超车）</option>
+    </select>
+  </div>
+
+  <!--<div class="form-group">
+    <label for="topic">研讨会技术报告题目（可选）</label>
+    <input type="text" class="form-control" id="topic" placeholder="16 words" v-model="table.topic">
+  </div>-->
+
+  <div class="form-group">
+    <label for="address">快递收件地址</label>
+    <textarea class="form-control" id="address" rows="3" placeholder="收件人姓名，手机，地址" v-model="table.address"></textarea>
+  </div>
+  <hr />
+
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">指导老师列表<button type="button" class="btn btn-default btn-xs pull-right" v-on:click="toggleShow1()"><span v-if="show1">收缩</span><span v-else>展开</span></button></div>
+  <div class="panel-body" v-show="show1">
+    <div id="teacherForm">
+        <div class="row">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="teacherName">姓名</label>
+                    <input type="text" class="form-control" id="teacherName" v-model="teacherEnt.name">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="teacherTitle">职务</label>
+                    <input type="text" class="form-control" id="teacherTitle" v-model="teacherEnt.title">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="teacherPhone">手机</label>
+                    <input type="text" class="form-control" id="teacherPhone" v-model="teacherEnt.phone">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="teacherEmail">邮箱</label>
+                    <input type="text" class="form-control" id="teacherEmail" v-model="teacherEnt.email">
+                </div>
+
+                <button type="button" class="btn btn-primary btn-sm form-control" v-on:click="addTeacher()">添加老师</button>
+                
+            </form>
+                    
+        </div>
+        
+    </div>
+  </div>
+  <!-- Table -->
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+            <th>#</th>
+            <th>姓名</th>
+            <th class="hidden-xs">职务</th>
+            <th class="hidden-xs">手机</th>
+            <th class="hidden-xs">邮箱</th>
+            <th v-if="!table.status" >操作</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr v-for="teacher in teacherList">
+              <td>{{ $index + 1 }}</td>
+              <td>{{ teacher.name }}</td>
+              <td class="hidden-xs">{{ teacher.title }}</td>
+              <td class="hidden-xs">{{ teacher.phone }}</td>
+              <td class="hidden-xs">{{ teacher.email }}</td>
+              <td v-if="!table.status" >
+                  <button v-on:click="editTeacher($index)"><span class="glyphicon glyphicon-pencil"></span></button>
+                  <button v-on:click="removeTeacher($index)"><span class="glyphicon glyphicon-remove"></span></button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">参赛学生列表<button type="button" class="btn btn-default btn-xs pull-right" v-on:click="toggleShow2()"><span v-if="show2">收缩</span><span v-else>展开</span></button></div>
+  <div class="panel-body" v-show="show2">
+    <div id="studentForm">
+        <div class="row">
+            <form class="form-inline">
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="studentName">姓名</label>
+                    <input type="text" class="form-control" id="studentName" v-model="studentEnt.name">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="studentMajor">专业</label>
+                    <input type="text" class="form-control" id="studentMajor" v-model="studentEnt.major">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="studentPhone">手机</label>
+                    <input type="text" class="form-control" id="studentPhone" v-model="studentEnt.phone">
+                </div>
+                <div class="form-group">
+                    <label class="col-md-4 col-xs-12" for="studentEmail">邮箱</label>
+                    <input type="text" class="form-control" id="studentEmail" v-model="studentEnt.email">
+                </div>
+
+                <div class="form-group">
+                <button type="button" class="btn btn-primary btn-sm form-control"  v-on:click="addStudent()">添加学生</button>
+                </div>
+                
+            </form>
+                    
+        </div>
+        
+    </div>
+  </div>
+  <!-- Table -->
+  <table class="table table-bordered">
+      <thead>
+          <tr>
+            <th>#</th>
+            <th >姓名</th>
+            <th class="hidden-xs">专业</th>
+            <th class="hidden-xs">手机</th>
+            <th class="hidden-xs">邮箱</th>
+            <th v-if="!table.status" >操作</th>
+          </tr>
+      </thead>
+      <tbody>
+          <tr v-for="student in studentList">
+              <td>{{ $index + 1 }}</td>
+              <td>{{ student.name }}</td>
+              <td>{{ student.major }}</td>
+              <td>{{ student.phone }}</td>
+              <td>{{ student.email }}</td>
+              <td v-if="!table.status" >
+                  <button v-on:click="editStudent($index)"><span class="glyphicon glyphicon-pencil"></span></button>
+                  <button v-on:click="removeStudent($index)"><span class="glyphicon glyphicon-remove"></span></button>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+</div>
+  <hr />
+  <button v-if="!table.status" :disabled="disable" type="submit" class="btn btn-primary form-control" v-on:click="submit()">保存</button>
+</div>
+{% endraw %}
+{% endblock %}

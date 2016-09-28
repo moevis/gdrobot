@@ -1,0 +1,10 @@
+{% extends "template/layout.html" %}
+
+{% block content %}
+{{ message }}
+{{ error.status }}
+<pre>
+{{ error.stack }}
+</pre>
+{% endblock %}
+

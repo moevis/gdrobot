@@ -1,0 +1,25 @@
+{% extends "template/layout.html" %}
+
+{% block js %}
+<script src="/javascripts/error.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/error.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<h2>出错</h2>
+<hr />
+<form id="app" v-on:submit.prevent>
+    <fieldset>
+        <legend>您是游客，要访问页面，请先：</legend>
+        <div class="form-group">
+            <a href="/user/login" class="btn btn-default btn-primary">去登陆</a>
+            <a href="/user/register" class="btn btn-default btn-primary">去注册</a>
+        </div>
+    </fieldset>
+</form>
+{% endraw %}
+{% endblock %}
