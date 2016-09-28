@@ -13,7 +13,3 @@ var db = new sqlite3.Database(dbfile);
 db.get('select * from user where email=?',"moevery@gmail.com", function(err, data) {
     console.log(data);
 });
-
-// db.run("insert into user(email, password) values(?,?)", "userna","pass", function(err,data) {
-//     console.log(err);
-// });
