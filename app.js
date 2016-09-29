@@ -6,8 +6,10 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var nunjucks = require('nunjucks');
 var session = require('express-session');
+var RedisStore = require('connect-redis')(session);
 
 var config = require('./utils/global');
+var resourcePrefix = require('./config.json').resource;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -35,16 +37,19 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+
 app.use(session({
-  secret: 'keyboard cat',
-  resave: true,
-  saveUninitialized: true,
-  cookie: {
-    maxAge: 60 * 1000 * 1000
-  }
+    store: new RedisStore({
+        ttl: 7200,
+        db: 1
+    }),
+    resave: true,
+    saveUninitialized: true,
+    secret: 'keyboard cat',
 }));
 
 app.use(function(req, res, next) {
+    req.prefix = resourcePrefix;
     if (!config.global) {
         config.load(function(){
             req.global = config.global;
