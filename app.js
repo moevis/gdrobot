@@ -9,6 +9,7 @@ var session = require('express-session');
 var RedisStore = require('connect-redis')(session);
 
 var config = require('./utils/global');
+var resourcePrefix = require('./config.json').resource;
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
@@ -48,6 +49,7 @@ app.use(session({
 }));
 
 app.use(function(req, res, next) {
+    req.prefix = resourcePrefix;
     if (!config.global) {
         config.load(function(){
             req.global = config.global;

@@ -6,7 +6,7 @@ var md5 = require('md5');
 
 /* GET users listing. */
 router.get('/login', function (req, res, next) {
-	res.render('user/login', { user: req.session.user });
+	res.render('user/login', { user: req.session.user, prefix: req.prefix});
 });
 
 router.post('/login', function (req, res, next) {
@@ -32,7 +32,7 @@ router.get('/profile', function (req, res, next) {
 		res.redirect('/needLogin');
 		return;
 	}
-	res.render('user/profile', { user: req.session.user });
+	res.render('user/profile', { user: req.session.user, prefix: req.prefix});
 });
 
 router.post('/profile', function (req, res, next) {
@@ -86,14 +86,14 @@ router.get('/reportList', function (req, res, next) {
 		db.all('select id, teamName, entry, students, status from report where userId=?',
 			req.session.user.id, 
 			function(err, data) {
-				res.render('user/reportList', { user: req.session.user, reportList: data});
+				res.render('user/reportList', { user: req.session.user, reportList: data, prefix: req.prefix});
 			}
 		)
 	}
 });
 
 router.get('/register', function (req, res, next) {
-	res.render('user/register', { user: req.session.user });
+	res.render('user/register', { user: req.session.user, prefix: req.prefix});
 });
 
 router.post('/register', function (req, res, next) {
@@ -121,7 +121,7 @@ router.get('/notice', function (req, res, next) {
 	if (!req.session.user) {
 		return res.redirect('/needLogin');
 	}
-	res.render('user/notice', { user: req.session.user });
+	res.render('user/notice', { user: req.session.user , prefix: req.prefix});
 });
 
 router.get('/search', function (req, res, next) {

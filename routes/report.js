@@ -4,7 +4,7 @@ var db = require('../utils/db');
 
 /* GET report page. */
 router.get('/form', function(req, res, next) {
-    res.render('report/form', { user: req.session.user, form: {}});
+    res.render('report/form', { user: req.session.user, form: {}, prefix: req.prefix});
 });
 
 router.get('/:id/form', function(req, res, next) {
@@ -18,7 +18,7 @@ router.get('/:id/form', function(req, res, next) {
         if (!data) {
             res.redirect('/user/profile');
         } else {
-            res.render('report/form', { user: req.session.user, form: data });
+            res.render('report/form', { user: req.session.user, form: data , prefix: req.prefix});
         }
     });
 });

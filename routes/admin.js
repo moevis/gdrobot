@@ -107,7 +107,7 @@ router.get('/reportList', function(req, res, next) {
 	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
-    res.render('admin/reportList', { user: req.session.user});
+    res.render('admin/reportList', { user: req.session.user, prefix: req.prefix});
 });
 
 
@@ -115,14 +115,14 @@ router.get('/userManage', function(req, res, next) {
 	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
-    res.render('admin/userManage', { user: req.session.user});
+    res.render('admin/userManage', { user: req.session.user, prefix: req.prefix});
 });
 
 router.get('/article', function(req, res, next) {
 	if (!req.session.user || req.session.user.role != 1) {
 		return res.redirect('/needLogin');
 	}
-    res.render('admin/article', { user: req.session.user});
+    res.render('admin/article', { user: req.session.user, prefix: req.prefix});
 });
 
 router.get('/article/:id', function(req, res, next) {
@@ -140,7 +140,7 @@ router.get('/article/:id', function(req, res, next) {
 
 router.post('/article/:id', function(req, res, next) {
 	if (!req.session.user || req.session.user.role != 1) {
-		return res.redirect('/needLogin');
+		return res.json({error: true});
 	}
     var id = req.params.id;
     var title = req.body.title;
