@@ -2,24 +2,66 @@ var express = require('express');
 var router = express.Router();
 var validate = require('../utils/regex');
 var db = require('../utils/db');
+var redis = require('../utils/redis');
 var md5 = require('md5');
+var async = require('async');
 
 /* GET users listing. */
 router.get('/login', function (req, res, next) {
-	res.render('user/login', { user: req.session.user, prefix: req.prefix});
+	var times;
+	res.render('user/login', { user: req.session.user, prefix: req.prefix, times: 0});
 });
 
 router.post('/login', function (req, res, next) {
+	var captcha = req.body.captcha;
 	var email = req.body.email;
 	var password = md5(req.body.password);
-	db.get('select * from user where email=?', email, function (err, data) {
-		if (data && password === data.password) {
-			req.session.user = data;
-			res.json({error: false});
+
+
+	redis.get(email + ':times', function(err, times) {
+		if (err) {
+			res.json({error: true, message: "服务器出错"});
 		} else {
-			res.json({error: true, message: "密码或账号错误"});
+
+			if (times) {
+				if (times > 2 && captcha === '') {
+					return res.json({error: true, message: '请输入验证码', times: times + 1});
+				} else {
+					if (req.session.captcha === captcha.toLowerCase()) {
+						var password = md5(req.body.password);
+						db.get('select * from user where email=?', email, function (err, data) {
+							if (data && password === data.password) {
+								req.session.user = data;
+								return res.json({error: false, times: 0});
+							} else {
+								redis.set(email + ':times', times + 1);
+								redis.expire(email + ':times', 600);
+								return res.json({error: true, message: "密码或账号错误", times: times + 1});
+							}
+						});
+					} else {
+						return res.json({error: true, message: "验证码错误", times: times + 1});
+					}
+				}
+			} else {
+				db.get('select * from user where email=?', email, function (err, data) {
+					if (data && password === data.password) {
+						req.session.user = data;
+						return res.json({error: false});
+					} else {
+						if (times) {
+							redis.set(email + ':times', +times + 1);
+						} else {
+							redis.set(email + ':times', 1);
+						}
+						redis.expire(email + ':times', 600);
+						return res.json({error: true, message: "密码或账号错误", times: 1});
+					}
+				});
+			}
 		}
 	});
+
 });
 
 router.get('/logout', function (req, res, next) {

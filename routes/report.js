@@ -12,9 +12,7 @@ router.get('/:id/form', function(req, res, next) {
         res.redirect("/needLogin");
         return;
     }
-    console.log(`select * from report where id=${req.params.id} and userId=${req.session.user.id}`)
     db.get('select * from report where id=? and userId=?', req.params.id, req.session.user.id, function(err, data) {
-        console.log(data);
         if (!data) {
             res.redirect('/user/profile');
         } else {
@@ -105,8 +103,6 @@ router.post('/:id/submit', function(req, res, next) {
     var currDate = new Date();
     var startDate = new Date(req.global['START_DATE']);
     var endDate = new Date(req.global['END_DATE']);
-    console.log(startDate);
-    console.log(req.global);
     if (currDate < startDate) {
         return res.json({error: true, message: "还没到提交时间呢，再等等。"});
     } else if (currDate > endDate) {

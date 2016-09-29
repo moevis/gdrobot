@@ -1,6 +1,9 @@
 {% extends "template/layout.html" %}
 
 {% block js %}
+<script>
+    var times = 1;
+</script>
 <script src="/javascripts/user/login.js"></script>
 {% endblock %}
 
@@ -22,8 +25,14 @@
         <input type="email" class="form-control" id="email" v-model="table.email" placeholder="邮箱">
     </div>
     <div class="form-group">
-        <label for="passowrd">密码</label>
-        <input type="password" class="form-control" id="passowrd" v-model="table.password" placeholder="密码">
+        <label for="password">密码</label>
+        <input type="password" class="form-control" id="password" v-model="table.password" placeholder="密码">
+    </div>
+    <div class="form-group" v-if="times > 2">
+        <label for="captcha">验证码</label>
+        <div class="raw" v-on:click="getCaptcha()"><svg class="well" id="captcha-image">{{{ captchaImage }}}</svg></div>
+        
+        <input type="text" class="form-control" id="captcha" v-model="table.captcha" placeholder="验证码">
     </div>
     <div class="form-group">
         <button type="submit" :disabled="disable" class="btn btn-default btn-primary" v-on:click="submit()">登陆</button> <a type="submit" href="/user/register" class="btn btn-default">注册账号</a>

@@ -4,11 +4,13 @@ document.addEventListener('DOMContentLoaded', function() {
         el: '#app',
         data: {
             table: {
-
+                captcha: ''
             },
             message: "",
+            captchaImage: '',
             notice: false,
-            disable: false
+            disable: false,
+            times: times
         },
         methods: {
             submit: function() {
@@ -22,6 +24,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     self.disable = false;
                     if (data.error) {
                         app.showNotice(data.message);
+                        app.times = data.times;
+                        app.getCaptcha();
+                        app.table.captcha = '';
                     } else {
                         window.location.href = "/user/profile";
                     }
@@ -33,7 +38,15 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotice: function(msg) {
                 this.message = msg;
                 this.notice = true;
+            },
+            getCaptcha: function () {
+                $.get('/captcha', function(data) {
+                    app.captchaImage = data;
+                });
             }
         }
     });
+    if (times > 3) {
+        app.getCaptcha();
+    }
 });
