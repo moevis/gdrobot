@@ -1,8 +1,4 @@
 {
     "db": "/home/zhen/code/data/db.file",
-<<<<<<< HEAD
     "resource": "http://gdrobot.moevis.cc"
-=======
-    "resource": ""
->>>>>>> master
 }
