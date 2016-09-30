@@ -24,14 +24,18 @@ router.post('/login', function (req, res, next) {
 		} else {
 
 			if (times) {
-				if (times > 2 && captcha === '') {
+				times = parseInt(times);
+				if (times > 3 && captcha === '') {
+					redis.set(email + ':times', times + 1);
+					redis.expire(email + ':times', 600);
 					return res.json({error: true, message: '请输入验证码', times: times + 1});
 				} else {
-					if (req.session.captcha === captcha.toLowerCase()) {
+					if (times <= 3 || req.session.captcha === captcha.toLowerCase()) {
 						var password = md5(req.body.password);
 						db.get('select * from user where email=?', email, function (err, data) {
 							if (data && password === data.password) {
 								req.session.user = data;
+								redis.expire(email + ':times', -1);
 								return res.json({error: false, times: 0});
 							} else {
 								redis.set(email + ':times', times + 1);
@@ -40,20 +44,19 @@ router.post('/login', function (req, res, next) {
 							}
 						});
 					} else {
-						return res.json({error: true, message: "验证码错误", times: times + 1});
+						redis.set(email + ':times', times + 1);
+						redis.expire(email + ':times', 600);
+						return res.json({error: true, message: ((captcha === '')? "请输入验证码": "验证码错误"), times: times + 1});
 					}
 				}
 			} else {
 				db.get('select * from user where email=?', email, function (err, data) {
 					if (data && password === data.password) {
 						req.session.user = data;
+						redis.expire(email + ':times', -1);
 						return res.json({error: false});
 					} else {
-						if (times) {
-							redis.set(email + ':times', +times + 1);
-						} else {
-							redis.set(email + ':times', 1);
-						}
+						redis.set(email + ':times', 1);
 						redis.expire(email + ':times', 600);
 						return res.json({error: true, message: "密码或账号错误", times: 1});
 					}
