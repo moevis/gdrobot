@@ -16,26 +16,32 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.teacherEnt = {};
             },
             submitProfile: function() {
-                disable = true;
-                $.post('/user/profile', this.table, function(data) {
-                    disable = false;
-                    if (data.error) {
-                        app.showNotice(data.message);
-                    } else {
+                var self = this;
+                self.disable = true;
+                $.post('/user/profile', this.table)
+                    .done(function(data) {
+                        self.disable = false;
                         app.showNotice("更改成功！");
-                    }
-                });
+                    })
+                    .fail(function(xhr) {
+                        self.disable = false;
+                        var data = xhr.responseJSON;
+                        app.showNotice(data.message);
+                    });
             },
             submitPassword: function() {
-                disable = true;
-                $.post('/user/password', this.table, function(data) {
-                    disable = false;
-                    if (data.error) {
-                        app.showNotice(data.message);
-                    } else {
+                var self = this;
+                self.disable = true;
+                $.post('/user/password', this.table)
+                    .done(function(data) {
+                        self.disable = false;
                         app.showNotice("更改成功！");
-                    }
-                });
+                    })
+                    .fail(function(xhr) {
+                        self.disable = false;
+                        var data = xhr.responseJSON;
+                        app.showNotice(data.message);
+                    });
             },
             dismiss: function() {
                 notice = false;

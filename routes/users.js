@@ -14,8 +14,8 @@ router.get('/login', function (req, res, next) {
 });
 
 router.post('/login', function (req, res, next) {
-	var captcha = req.body.captcha;
-	var email = req.body.email;
+	var captcha = req.body.captcha || '';
+	var email = req.body.email || '';
 	var password = md5(req.body.password);
 
 
@@ -32,7 +32,7 @@ router.post('/login', function (req, res, next) {
 					req.session.captcha = svgCaptcha.randomText();
 					return res.status(401).json({message: '请输入验证码', times: times + 1});
 				} else {
-					if (times <= 3 || req.session.captcha.toLowerCase() === captcha.toLowerCase()) {
+					if (times <= 3 || req.session.captcha && req.session.captcha.toLowerCase() === captcha.toLowerCase()) {
 						// var password = md5(req.body.password);
 						db.get('select * from user where email=?', email, function (err, data) {
 							if (data && password === data.password) {
@@ -87,7 +87,7 @@ router.get('/profile', function (req, res, next) {
 
 router.post('/profile', function (req, res, next) {
     if (!req.session.user) {
-        res.json({error: true, message: "您未登陆，或已经超时退出"});
+        res.status(401).json({message: "您未登陆，或已经超时退出"});
         return;
     }
 	var name = req.body.name;
@@ -99,7 +99,7 @@ router.post('/profile', function (req, res, next) {
 				res.json({ error: false });
 			 });
 		} else {
-			return res.json({error: true, message: "未知错误"});
+			return res.status(500).json({message: "未知错误"});
 		}
 	});
 });
@@ -107,22 +107,22 @@ router.post('/profile', function (req, res, next) {
 
 router.post('/password', function (req, res, next) {
     if (!req.session.user) {
-        res.json({error: true, message: "您未登陆，或已经超时退出"});
+        res.status(401).json({error: true, message: "您未登陆，或已经超时退出"});
         return;
     }
 	var oldPassword = md5(req.body.password || '');
 	if (oldPassword != req.session.user.password) {
-		return res.json({error: true, message: "密码错误"});
+		return res.status(400).json({message: "密码错误"});
 	}
 	if (! req.body.newPassword || !req.body.newPassword.length || req.body.newPassword.length < 6) {
-		return res.json({error: true, message: "密码太短，请重新输入。"});
+		return res.status(400).json({message: "密码太短，请重新输入。"});
 	}
 	var password = md5(req.body.newPassword);
 	db.run('update user set password=? where id=?', password, req.session.user.id, function(err) {
 		if (!err) {
 			return res.json({error: false});
 		} else {
-			return res.json({error: true, message: "未知错误"});
+			return res.status(400).json({message: "未知错误"});
 		}
 	});
 });
@@ -151,16 +151,13 @@ router.post('/register', function (req, res, next) {
 	var password = md5(req.body.password);
 	db.get('select * from user where email=?', email, function (err, data) {
 		if (data) {
-			res.json({ error: true, message: "email 已经被使用了" });
+			res.status(400).json({ message: "email 已经被使用了" });
 		} else {
 			db.run('INSERT INTO user(email, password) values(?, ?)', email, password, function(err) {
 				if (err) {
-					res.json({error: true, message: err});
+					res.status(400).json({message: "未知错误"});
 				} else {
-					// db.get('select * from user where email=? and password=? limit 1', email, password, function (err, data) {
-					// 	req.session.user = data;
-						res.json({ error: false });
-					// });
+					res.json({ error: false });
 				}
 			});
 		}

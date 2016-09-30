@@ -33,15 +33,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 var self = this;
                 self.disable = true;
-                $.post('#', this.table, function(data) {
-                    self.disable = false;
-                    if (data.error) {
-                        app.showNotice(data.message);
-                    } else {
+                $.post('#', this.table)
+                    .done(function(data) {
+                        self.disable = false;
                         alert("注册成功!");
                         window.location.href = "/user/login";
-                    }
-                });
+                    }).fail(function(xhr) {
+                        var data = xhr.responseJSON;
+                        self.disable = false;
+                        app.showNotice(data.message);
+                    });
             },
             dismiss: function() {
                 notice = false;
