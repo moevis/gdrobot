@@ -20,17 +20,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 var self = this;
                 this.disable = true;
-                $.post('#', this.table, function(data) {
-                    self.disable = false;
-                    if (data.error) {
+                $.post('#', this.table)
+                    .done(function(data) {
+                        self.disable = false;
+                        window.location.href = "/user/profile";
+                    })
+                    .fail(function(data) {
+                        var data = data.responseJSON;
+                        self.disable = false;
                         app.showNotice(data.message);
                         app.times = data.times;
                         app.getCaptcha();
                         app.table.captcha = '';
-                    } else {
-                        window.location.href = "/user/profile";
-                    }
-                });
+                    });
             },
             dismiss: function() {
                 notice = false;

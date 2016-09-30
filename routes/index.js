@@ -12,16 +12,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/needLogin', function(req, res, next) {
-  res.render('needLogin', { user: req.session.user , prefix: req.prefix});
+  res.status(401).render('needLogin', { user: req.session.user , prefix: req.prefix});
 });
 
 router.get('/captcha', function(req, res, next) {
-    var text = svgCaptcha.randomText();
-    var captcha = svgCaptcha(text);
-    // res.set('Content-Type', 'image/svg+xml');
-    // console.log(req.session);
-    // client.
-    req.session.captcha = text.toLowerCase();
+    if (!req.session.captcha) {
+        req.session.captcha = svgCaptcha.randomText();
+    }
+    var captcha = svgCaptcha(req.session.captcha);
     res.status(200).send(captcha);
 });
 
