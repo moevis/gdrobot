@@ -4,7 +4,13 @@ var db = require('../utils/db');
 
 /* GET report page. */
 router.get('/form', function(req, res, next) {
-    res.render('report/form', { user: req.session.user, form: {}, prefix: req.prefix});
+    if (req.session.user) {
+        db.get('select count(*) as count from report where userId = ?', req.session.user.id, function(err, data) {
+            res.render('report/form', { user: req.session.user, form: {}, prefix: req.prefix, count: data.count});
+        });
+    } else {
+        res.render('report/form', { user: req.session.user, form: {}, prefix: req.prefix});
+    }
 });
 
 router.get('/:id/form', function(req, res, next) {

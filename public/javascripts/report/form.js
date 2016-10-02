@@ -16,7 +16,8 @@ document.addEventListener('DOMContentLoaded', function() {
             teacherList: [],
             show1: true,
             show2: true,
-            disable: false
+            disable: false,
+            count: count
         },
         methods: {
             addTeacher: function() {

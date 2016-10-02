@@ -4,6 +4,7 @@
 {% block js %}
 <script>
     var report = {{ form | dump | safe}};
+    var count = {% if user %}{{ count }}{%else%}0{%endif%};
 </script>
 <script src="/javascripts/report/form.js"></script>
 {% endblock %}
@@ -19,10 +20,12 @@
 {% endif %}
 
 {% raw %}
-<h2 class="text-center">2016年广东省机器人大赛暨机器人技术研讨会</h2>
-<h3 class="text-center">报名表</h3>
-<hr />
+
 <div id="app">
+    <div class="well" v-if="count > 0">您已经填了 {{ count }} 个报名表，点击 <a class="btn btn-xs btn-default" href="/user/reportList">我的报名表</a> 查看</div>
+    <h2 class="text-center">2016年广东省机器人大赛暨机器人技术研讨会</h2>
+    <h3 class="text-center">报名表</h3>
+    <hr />
   <div class="form-group">
     <label for="schoolName">学校名称及院系</label>
     <input type="text" class="form-control" id="schoolName" placeholder="例如：华南理工大学软件学院" v-model="table.schoolName">
