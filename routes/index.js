@@ -16,9 +16,7 @@ router.get('/needLogin', function(req, res, next) {
 });
 
 router.get('/captcha', function(req, res, next) {
-    if (!req.session.captcha) {
-        req.session.captcha = svgCaptcha.randomText();
-    }
+    req.session.captcha = svgCaptcha.randomText();
     var captcha = svgCaptcha(req.session.captcha);
     res.status(200).send(captcha);
 });
