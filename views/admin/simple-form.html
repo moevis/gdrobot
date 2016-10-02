@@ -1,0 +1,84 @@
+{% extends "template/simple-form.html" %}
+
+{% block js %}
+<script>
+    var form = {{ data | dump | safe }};
+</script>
+<script src="/javascripts/admin/simple-form.js"></script>
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="/stylesheets/admin/simple-form.css">
+{% endblock %}
+
+{% block content %}
+{% raw %}
+<div id="app">
+    <h1 class="text-center">2016年广东省机器人大赛暨机器人技术研讨会</h1>
+    <hr />
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th class="col-xs-2">学校</th>
+                <td>{{ table.schoolName }}</td>
+            </tr>
+            <tr>
+                <th class="col-xs-2">参赛队名</th>
+                <td>{{ table.teamName }}</td>
+            </tr>
+            <tr>
+                <th class="col-xs-2">参赛项目</th>
+                <td>{{ entry[table.entry] }}</td>
+            </tr>
+            <tr>
+                <th class="col-xs-2">快递收件地址</th>
+                <td>{{ table.address }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h5><b>带队老师</b></h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>职务</th>
+                <th>手机</th>
+                <th>邮箱</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="teacher in teachers">
+                <td>{{ teacher.name }}</td>
+                <td>{{ teacher.title }}</td>
+                <td>{{ teacher.phone }}</td>
+                <td>{{ teacher.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h5><b>参赛学生</b></h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>姓名</th>
+                <th>专业</th>
+                <th>手机</th>
+                <th>邮箱</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr v-for="student in students">
+                <td>{{ student.name }}</td>
+                <td>{{ student.major }}</td>
+                <td>{{ student.phone }}</td>
+                <td>{{ student.email }}</td>
+            </tr>
+        </tbody>
+    </table>
+    <!--<button type="button" class="btn btn-success">通过</button>
+    <button type="button" class="btn btn-danger">不通过</button>
+    <button type="button" class="btn btn-primary">以后再说</button>-->
+</div>
+{% endraw %}
+{% endblock %}

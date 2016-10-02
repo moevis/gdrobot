@@ -158,10 +158,21 @@ router.get('/:id/forms', function (req, res, next) {
 	if (!req.session.user || req.session.user.role != 1) {
 		return res.json(401).json({message: "未登陆或没权限"});
 	} else {
-		db.all('select entry, status from report where userId=?', req.params.id,  function(err, data) {
+		db.all('select id, entry, status, created from report where userId=?', req.params.id,  function(err, data) {
             res.json({result: data});
         });
 	}
 });
+
+router.get('/form/:id', function (req, res, next) {
+	if (!req.session.user || req.session.user.role != 1) {
+		return res.redirect('/needLogin');
+	} else {
+		db.get('select * from report where id = ?', req.params.id,  function(err, data) {
+            res.render('admin/simple-form', { data: data});
+        });
+	}
+});
+
 
 module.exports = router;

@@ -20,6 +20,10 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         methods: {
             addTeacher: function() {
+                if (this.studentList.length === 2) {
+                    alert("教师数量已达上限。");
+                    return;
+                }
                 if (this.teacherEnt.name == '' || this.teacherEnt.title == '' || this.teacherEnt.phone == '' || this.teacherEnt.email == '') {
                     alert("教师信息还不全");
                     return;
@@ -28,8 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.teacherEnt = {};
             },
             addStudent: function() {
+                if (this.studentList.length === 5) {
+                    alert("学生数量已达上限。");
+                    return;
+                }
                 if (this.studentEnt.name == '' || this.studentEnt.major == '' || this.studentEnt.phone == '' || this.studentEnt.email == '') {
-                    alert("教师信息还不全");
+                    alert("学生信息还不全");
                     return;
                 }
                 this.studentList.push(this.studentEnt);

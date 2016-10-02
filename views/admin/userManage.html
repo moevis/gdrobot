@@ -30,7 +30,7 @@
 
           <div class="modal-body">
             <div class="list-group">
-              <a v-for="form in subList" href="#" class="list-group-item">{{ entry[form.entry] }}<span class="badge">{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][form.status] }}</span></a>
+              <a v-for="form in subList" :href="'/admin/form/' + form.id" class="list-group-item">{{ entry[form.entry] }}<span class="badge">{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][form.status] }}</span></a>
             </div>
           </div>
         </div>
