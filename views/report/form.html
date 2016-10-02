@@ -23,12 +23,6 @@
 <h3 class="text-center">报名表</h3>
 <hr />
 <div id="app">
-    
-    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
-        {{ message }}
-        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
-    </div>
-
   <div class="form-group">
     <label for="schoolName">学校名称及院系</label>
     <input type="text" class="form-control" id="schoolName" placeholder="例如：华南理工大学软件学院" v-model="table.schoolName">
@@ -109,7 +103,7 @@
           </tr>
       </thead>
       <tbody>
-          <tr v-for="teacher in teacherList">
+          <tr v-for="(teacher, $index) in teacherList">
               <td>{{ $index + 1 }}</td>
               <td>{{ teacher.name }}</td>
               <td class="hidden-xs">{{ teacher.title }}</td>
@@ -171,7 +165,7 @@
           </tr>
       </thead>
       <tbody>
-          <tr v-for="student in studentList">
+          <tr v-for="(student, $index) in studentList">
               <td>{{ $index + 1 }}</td>
               <td>{{ student.name }}</td>
               <td>{{ student.major }}</td>

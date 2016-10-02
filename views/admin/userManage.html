@@ -9,6 +9,7 @@
 
 {% block css %}
 <link rel="stylesheet" href="/stylesheets/admin/userManage.css">
+<link rel="stylesheet" href="/stylesheets/modal.css">
 {% endblock %}
 
 {% block content %}
@@ -16,6 +17,26 @@
 <h2>用户管理</h2>
 <hr />
 <div id="app" v-on:submit.prevent>
+
+
+<div v-if="showModal">
+    <div class="modal-mask" @click="showModal = false">
+      <div class="modal-wrapper">
+        <div class="modal-container">
+
+          <div class="modal-header">
+            <h4>用户报名表</h4>
+          </div>
+
+          <div class="modal-body">
+            <div class="list-group">
+              <a v-for="form in subList" href="#" class="list-group-item">{{ entry[form.entry] }}<span class="badge">{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][form.status] }}</span></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
@@ -49,18 +70,43 @@
             <th>电话</th>
             <th>姓名</th>
             <th>注册日期</th>
+            <th>权限</th>
             <th>操作</th>
         </tr>
     </thead>
     <tbody>
-        <tr v-for="u in list">
+        <tr v-for="(u, $index) in list">
             <td>{{ u.id }}</td>
             <td>{{ u.email }}</td>
             <td>{{ u.phone }}</td>
             <td>{{ u.name }}</td>
             <td>{{ u.created }}</td>
             <td>
-                <button class="btn btn-default btn-xs" type="button">查看</button>
+                    <div class="btn-group">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            {{ ['用户', '管理员'][u.role]}} <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a v-on:click="promoteUser($index)">设为 管理员</a></li>
+                            <li><a v-on:click="demoteUser($index)">取消 管理员</a></li>
+                        </ul>
+                    </div>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <button class="btn btn-info btn-sm" type="button" @click="getUserForms($index)">报名表</button>
+                    <div class="btn-group">
+                        <button class="btn btn-primary btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            其他 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a :href="'admin/' + u.id + '/activity'"><span class="glyphicon glyphicon-th-list"></span> 账户活动</a></li>
+                            <li><a href=""><span class="glyphicon glyphicon-envelope"></span> 消息</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a v-on:click="banUser($index)"><span class="glyphicon glyphicon-remove"></span> 封禁</a></li>
+                        </ul>
+                    </div>
+                </div>
             </td>
         </tr>
     </tbody>
@@ -73,7 +119,7 @@
         <span aria-hidden="true">&laquo;</span>
       </a>
     </li>-->
-    <li v-for="n in Math.ceil(count/limit)"><a href="changePage($index)">{{$index+1}}</a></li>
+    <li v-for="n in Math.ceil(count/limit)"><a v-on:click="changePage(n - 1)">{{n}}</a></li>
     <!--<li>
       <a href="#" aria-label="Next">
         <span aria-hidden="true">&raquo;</span>
@@ -81,8 +127,6 @@
     </li>-->
   </ul>
 </nav>
-
-
 
 </div>
 {% endraw %}

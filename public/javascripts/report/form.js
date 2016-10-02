@@ -74,13 +74,6 @@ document.addEventListener('DOMContentLoaded', function() {
                         }
                     }
                 });
-            },
-            dismiss: function() {
-                notice = false;
-            },
-            showNotice: function(msg) {
-                this.message = msg;
-                this.notice = true;
             }
         }
     });

@@ -76,7 +76,7 @@
 
 <nav>
   <ul class="pagination">
-    <li v-for="n in Math.ceil(count/limit)"><a href="changePage($index)">{{$index+1}}</a></li>
+    <li v-for="n in Math.ceil(count/limit)"><a v-on:click="changePage(n-1)">{{n}}</a></li>
   </ul>
 </nav>
 

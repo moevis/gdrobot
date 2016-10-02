@@ -177,34 +177,46 @@ router.get('/search', function (req, res, next) {
 	var email = req.query.email;
 	var date = req.query.date;
 	if (!req.session.user || req.session.user.role != 1) {
-		return res.json({error: true});
+		return res.status(401).json({message: "未登陆"});
 	}
 
 	if (!email && !date) {
 		db.all('select * from user order by id desc limit ?, ?', offset, limit, function(err, data) {
 			db.get('select count(*) as num from user', function(err, num) {
-				res.json({error: false, result: {
-					data: data,
-					count: num.num
-				}});
+				if (err) {
+					res.status(500).json({ message: error});
+				} else {
+					res.json({ result: {
+						data: data,
+						count: num.num
+					}});
+				}
 			});
 		});
 	} else if (email) {
 		db.all('select * from user where email like "?%" order by id desc limit ?, ?', email, offset, limit, function(err, data) {
 			db.get('select count(*) as num from user where email like "?%"', function(err, num) {
-				res.json({error: false, result: {
-					data: data,
-					count: num.num
-				}});
+				if (err) {
+					res.status(500).json({ message: error});
+				} else {
+					res.json({ result: {
+						data: data,
+						count: num.num
+					}});
+				}
 			});
 		});
 	} else {
 		db.all('select * from user where created > datetime(?, "unixepoch") order by id desc limit ?, ?', date, offset, limit, function(err, data) {
 			db.get('select count(*) as num from user where created > datetime(?, "unixepoch")', date, function(err, num) {
-				res.json({error: false, result: {
-					data: data,
-					count: num.num
-				}});
+				if (err) {
+					res.status(500).json({ message: error});
+				} else {
+					res.json({ result: {
+						data: data,
+						count: num.num
+					}});
+				}
 			});
 		});
 	}

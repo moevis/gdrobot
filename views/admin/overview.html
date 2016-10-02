@@ -46,10 +46,10 @@ var data = {{ data | dump | safe }};
                 </tr>
             </thead>
             <tbody v-el:options>
-                <tr v-for="op in table.option">
-                    <td><input type="text" class="form-control" value="{{op.key}}" readonly></td>
+                <tr v-for="(op, $index) in table.option">
+                    <td><input type="text" class="form-control" v-model="table.option[$index].key" readonly></td>
                     <td>
-                        <input type="text" class="form-control values" value="{{op.value}}">
+                        <input type="text" class="form-control values" v-model="table.option[$index].value">
                     </td>
                     <td>
                         <button type="button" class="btn btn-primary btn-sm" v-on:click="updateOption(op.key, $index)">修改</button>
@@ -114,7 +114,7 @@ var data = {{ data | dump | safe }};
                     <td>{{ r.schoolName }}</td>
                     <td>{{ entry[r.entry] }}</td>
                     <td>{{ r.created }}</td>
-                    <td>{{ r.status }}</td>
+                    <td>{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][r.status] }}</td>
                 </tr>
             </tbody>
         </table>

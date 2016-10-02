@@ -58,10 +58,11 @@ describe('USER page', () => {
     });
 
     describe('captcha test: 5 requests', () => {    
-        it('Should login successfully', (done) => {
+        it('login', (done) => {
             var agent = chai.request.agent(server);
             async.series([
                 (cb) => {
+                    console.log(1);
                     agent
                         .post('/user/login')
                         .send({ 
