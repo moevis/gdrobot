@@ -175,4 +175,34 @@ router.get('/form/:id', function (req, res, next) {
 });
 
 
+router.post('/form/:id/accept', function (req, res, next) {
+	if (!req.session.user || req.session.user.role != 1) {
+		return res.json(401).json({message: "未登陆或没权限"});
+	} else {
+		db.run('update report set status = 2 where id = ?', req.params.id, function(err) {
+            if (err) {
+                res.status(500).json({ message: err});
+            } else {
+                res.json({ error: false});
+            }
+        });
+	}
+});
+
+
+router.post('/form/:id/decline', function (req, res, next) {
+	if (!req.session.user || req.session.user.role != 1) {
+		return res.json(401).json({message: "未登陆或没权限"});
+	} else {
+		db.run('update report set status = 3 where id = ?', req.params.id, function(err) {
+            if (err) {
+                res.status(500).json({ message: err});
+            } else {
+                res.json({ error: false});
+            }
+        });
+	}
+});
+
+
 module.exports = router;

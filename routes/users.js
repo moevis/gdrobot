@@ -174,14 +174,13 @@ router.get('/notice', function (req, res, next) {
 router.get('/search', function (req, res, next) {
 	var limit = parseInt(req.query.limit) || 20;
 	var offset = parseInt(req.query.offset) || 0;
-	var email = req.query.email;
 	var date = req.query.date;
 	if (!req.session.user || req.session.user.role != 1) {
 		return res.status(401).json({message: "未登陆"});
 	}
 
-	if (!email && !date) {
-		db.all('select * from user order by id desc limit ?, ?', offset, limit, function(err, data) {
+	if (!date) {
+		db.all('select user.id as id, user.email as email, user.phone as phone, user.name as name, user.created as created, user.role as role, count(report.id) as num from user left join report on user.id = report.userId group by user.id order by user.id desc limit ?, ? ', offset, limit, function(err, data) {
 			db.get('select count(*) as num from user', function(err, num) {
 				if (err) {
 					res.status(500).json({ message: error});
@@ -193,21 +192,9 @@ router.get('/search', function (req, res, next) {
 				}
 			});
 		});
-	} else if (email) {
-		db.all('select * from user where email like "?%" order by id desc limit ?, ?', email, offset, limit, function(err, data) {
-			db.get('select count(*) as num from user where email like "?%"', function(err, num) {
-				if (err) {
-					res.status(500).json({ message: error});
-				} else {
-					res.json({ result: {
-						data: data,
-						count: num.num
-					}});
-				}
-			});
-		});
 	} else {
-		db.all('select * from user where created > datetime(?, "unixepoch") order by id desc limit ?, ?', date, offset, limit, function(err, data) {
+		db.all('select user.id as id, user.email as email, user.phone as phone, user.name as name, user.created as created, user.role as role, count(report.id) as num from user left join report on user.id = report.userId where user.created > datetime(?, "unixepoch") group by user.id order by user.id desc limit ?, ?', date, offset, limit, function(err, data) {
+			console.log(err);
 			db.get('select count(*) as num from user where created > datetime(?, "unixepoch")', date, function(err, num) {
 				if (err) {
 					res.status(500).json({ message: error});

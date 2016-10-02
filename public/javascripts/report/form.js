@@ -7,10 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
             },
             studentEnt: {
-
             },
             teacherEnt: {
-
             },
             studentList: [],
             teacherList: [],
@@ -25,7 +23,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert("教师数量已达上限。");
                     return;
                 }
-                if (this.teacherEnt.name == '' || this.teacherEnt.title == '' || this.teacherEnt.phone == '' || this.teacherEnt.email == '') {
+                if (this.teacherEnt.name == '' || this.teacherEnt.title == '' || this.teacherEnt.phone == '' || this.teacherEnt.email == ''
+                || this.teacherEnt.name == undefined || this.teacherEnt.title == undefined || this.teacherEnt.phone == undefined || this.teacherEnt.email == undefined) {
                     alert("教师信息还不全");
                     return;
                 }
@@ -37,7 +36,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert("学生数量已达上限。");
                     return;
                 }
-                if (this.studentEnt.name == '' || this.studentEnt.major == '' || this.studentEnt.phone == '' || this.studentEnt.email == '') {
+                if (this.studentEnt.name == '' || this.studentEnt.major == '' || this.studentEnt.phone == '' || this.studentEnt.email == ''
+                 || this.studentEnt.name == undefined || this.studentEnt.major == undefined || this.studentEnt.phone == undefined || this.studentEnt.email == undefined) {
                     alert("学生信息还不全");
                     return;
                 }

@@ -16,7 +16,10 @@
 <h2>报名管理</h2>
 <hr />
 <div id="app" v-on:submit.prevent>
-
+    <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
+        {{ message }}
+        <button v-on:click="dismiss()" type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
+    </div>
 <nav class="navbar navbar-default">
   <div class="container-fluid">
 
@@ -60,7 +63,7 @@
         </tr>
     </thead>
     <tbody>
-        <tr v-for="r in list">
+        <tr v-for="(r, $index) in list">
             <td>{{ r.id }}</td>
             <td>{{ r.schoolName }}</td>
             <td>{{ r.teamName }}</td>
@@ -68,7 +71,18 @@
             <td>{{ r.created }}</td>
             <td>{{ ['未提交', '已提交', '已审核', '未通过', '已失效'][r.status] }}</td>
             <td>
-                <a :href="'/admin/form/' + r.id" target="_blank" class="btn btn-default btn-xs" type="button">查看</a>
+                <div class="btn-group">
+                    <a :href="'/admin/form/' + r.id" target="_blank" class="btn btn-primary btn-sm" type="button">查看</a>
+                    <div class="btn-group">
+                        <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
+                            审核 <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a v-on:click="accept($index)"> 通过</a></li>
+                            <li><a v-on:click="decline($index)"> 不通过</a></li>
+                        </ul>
+                    </div>
+                </div>
             </td>
         </tr>
     </tbody>

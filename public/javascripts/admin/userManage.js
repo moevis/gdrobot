@@ -26,10 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     date = new Date(this.table.date);
                     date = date.getTime()/1000;
                 }
-                var email = this.table.email || '';
                 var offset = this.limit * this.curr;
                 var self = this;
-                $.get('/user/search?date=' + date + '&email=' + email + '&offset=' + offset + '&limit=' + this.limit).done(function(data) {
+                $.get('/user/search?date=' + date + '&offset=' + offset + '&limit=' + this.limit).done(function(data) {
                     self.count = data.result.count;
                     self.list = data.result.data;
                 }).fail(function(xhr) {

@@ -57,7 +57,7 @@
                             <li><a :href="'/report/' + report.id + '/form'"><span class="glyphicon glyphicon-pencil"></span>　修改/查看</a></li>
                             <li><a href="#" v-on:click="submit($index)"><span class="glyphicon glyphicon-cloud-upload"></span>　提交(将无法更改)</a></li>
                             <li role="separator" class="divider"></li>
-                            <li><a href="#" v-on:click="deleteReport(report.id)"><span class="glyphicon glyphicon-trash"></span>　删除</a></li>
+                            <li><a href="#" v-on:click="deleteReport($index)"><span class="glyphicon glyphicon-trash"></span>　删除</a></li>
                         </ul>
                     </div>
                     <div class="btn-group" v-else>

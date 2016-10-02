@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
             },
             message: "",
             notice: false,
-            limit: 20,
+            limit: 10,
             list: [],
             curr: 0,
             count: 0,
@@ -44,6 +44,25 @@ document.addEventListener('DOMContentLoaded', function() {
             showNotice: function(msg) {
                 this.message = msg;
                 this.notice = true;
+            },
+            accept: function(index) {
+                var id = this.list[index].id;
+                $.post('/admin/form/' + id + '/accept').done(function(data) {
+                    app.showNotice("操作成功");
+                }).fail(function(xhr) {
+                    var data = xhr.responseJSON;
+                    app.showNotice(data.message);
+                });
+            },
+            decline: function(index) {
+                var id = this.list[index].id;
+                $.post('/admin/form/' + id + '/decline').done(function(data) {
+                    app.showNotice("拒绝成功");
+                    app.list[index].status = 3;
+                }).fail(function(xhr) {
+                    var data = xhr.responseJSON;
+                    app.showNotice(data.message);
+                });
             }
         }
     });

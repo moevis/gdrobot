@@ -22,7 +22,7 @@ router.get('/:id/form', function(req, res, next) {
         if (!data) {
             res.redirect('/user/profile');
         } else {
-            res.render('report/form', { user: req.session.user, form: data , prefix: req.prefix});
+            res.render('report/form', { user: req.session.user, form: data , prefix: req.prefix, count: 0});
         }
     });
 });
