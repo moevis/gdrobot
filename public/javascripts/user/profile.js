@@ -3,9 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     app = new Vue({
         el: '#app',
         data: {
-            table: {
-
-            },
+            table: user,
             message: "",
             notice: false,
             disable: false

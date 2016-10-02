@@ -1,6 +1,14 @@
 {% extends "template/layout.html" %}
 
 {% block js %}
+<script>
+
+    var user = {
+        name: "{{ user.name }}",
+        phone: "{{ user.phone }}"
+    };
+
+</script>
 <script src="/javascripts/user/profile.js"></script>
 {% endblock %}
 

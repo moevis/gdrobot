@@ -30,8 +30,7 @@
     </div>
     <div class="form-group" v-if="times > 2">
         <label for="captcha">验证码</label>
-        <div class="raw" v-on:click="getCaptcha()"><svg class="well" id="captcha-image">{{{ captchaImage }}}</svg></div>
-        
+        <div class="raw" v-on:click="getCaptcha()"><svg class="well" id="captcha-image" v-html="captchaImage"></svg></div>
         <input type="text" class="form-control" id="captcha" v-model="table.captcha" placeholder="验证码" autocomplete=off>
     </div>
     <div class="form-group">
