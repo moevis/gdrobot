@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         methods: {
             addTeacher: function() {
-                if (this.studentList.length === 2) {
+                if (this.teacherList.length === 2) {
                     alert("教师数量已达上限。");
                     return;
                 }
