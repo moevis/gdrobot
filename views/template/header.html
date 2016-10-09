@@ -15,6 +15,7 @@
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
         <li {% if curr=="index" %} class="active"{% endif %}><a href="/">介绍</a></li>
+        <li {% if curr=="rules" %} class="active"{% endif %}><a href="/rules">规则</a></li>
         <li {% if curr=="report" %} class="active"{% endif %}><a href="/report/form">报名</a></li>
         {% if user.role == 1 %}
         <li class="dropdown">

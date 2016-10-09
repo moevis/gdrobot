@@ -7,9 +7,16 @@ var svgCaptcha = require('svg-captcha');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     db.get('select * from article where id=?', 1, function(err, data) {
-        res.render('page', { user: req.session.user, page: data, prefix: req.prefix});
+        res.render('page', { user: req.session.user, page: data, prefix: req.prefix, curr: 'index'});
     });
 });
+
+router.get('/rules', function(req, res, next) {
+    db.get('select * from article where id=?', 2, function(err, data) {
+        res.render('page', { user: req.session.user, page: data, prefix: req.prefix, curr: 'rules'});
+    });
+});
+
 
 router.get('/needLogin', function(req, res, next) {
   res.status(401).render('needLogin', { user: req.session.user , prefix: req.prefix});
