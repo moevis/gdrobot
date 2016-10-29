@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.teacherEnt = {};
             },
             addStudent: function() {
-                if (this.studentList.length === 5) {
+                if (this.studentList.length === 6) {
                     alert("学生数量已达上限。");
                     return;
                 }
