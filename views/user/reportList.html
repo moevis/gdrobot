@@ -15,7 +15,7 @@
 {% raw %}
 <h2>我的报名表</h2>
 <hr />
-<div class="well">报名截止日期 2016年10月30号，请在截止日期前提交报名表，提交后将无法修改。</div>
+<div class="well">报名截止日期 <del>2016年10月30号</del> <b>2016年10月30号</b>，请在截止日期前提交报名表，提交后将无法修改。</div>
 <form id="app" v-on:submit.prevent>
     <div v-if="notice" class="alert alert-warning alert-dismissible" role="alert">
         {{ message }}
