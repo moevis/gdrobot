@@ -75,9 +75,12 @@
                     <a :href="'/admin/form/' + r.id" target="_blank" class="btn btn-primary btn-sm" type="button">查看</a>
                     <div class="btn-group">
                         <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">
-                            审核 <span class="caret"></span>
+                            设为 <span class="caret"></span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-right">
+                            <li><a v-on:click="reset($index)"> 未提交</a></li>
+                            <li><a v-on:click="submit($index)"> 已提交</a></li>
+                            <li role="separator" class="divider"></li>
                             <li><a v-on:click="accept($index)"> 通过</a></li>
                             <li><a v-on:click="decline($index)"> 不通过</a></li>
                         </ul>

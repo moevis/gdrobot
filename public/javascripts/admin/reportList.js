@@ -45,10 +45,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.message = msg;
                 this.notice = true;
             },
+            reset: function (index) {
+                var id = this.list[index].id;
+                $.post('/admin/form/' + id + '/reset').done(function(data) {
+                    app.showNotice("操作成功");
+                    app.list[index].status = 0;
+                }).fail(function(xhr) {
+                    var data = xhr.responseJSON;
+                    app.showNotice(data.message);
+                });
+            },
+            submit: function (index) {
+                var id = this.list[index].id;
+                $.post('/admin/form/' + id + '/submit').done(function(data) {
+                    app.showNotice("操作成功");
+                    app.list[index].status = 1;
+                }).fail(function(xhr) {
+                    var data = xhr.responseJSON;
+                    app.showNotice(data.message);
+                });
+            },
             accept: function(index) {
                 var id = this.list[index].id;
                 $.post('/admin/form/' + id + '/accept').done(function(data) {
                     app.showNotice("操作成功");
+                    app.list[index].status = 2;
                 }).fail(function(xhr) {
                     var data = xhr.responseJSON;
                     app.showNotice(data.message);
