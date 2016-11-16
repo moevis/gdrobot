@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
             });
         },
         function(cb) {
-            db.all('select status, count(status) as num from report where status = 0 group by status', function(err, data) {
+            db.get('select count(*) as count from report', function(err, data) {
                 cb(null, data);
             });
         },
@@ -44,10 +44,9 @@ router.get('/', function(req, res, next) {
             lastUsers: results[2]
         };
         data.report = {
-            statistic: results[1]
+            count: results[1].count,
+            lastReport: results[3]
         };
-        data.report.count = results[1].map(function(e){return e.num;}).reduce(function(a,b) {return a+b;}, 0);
-        data.report.lastReport = results[3];
         data.option = results[4];
         res.render('admin/overview', { data: data, user: req.session.user});
     });
