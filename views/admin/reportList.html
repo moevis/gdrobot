@@ -93,7 +93,7 @@
 
 <nav>
   <ul class="pagination">
-    <li v-for="n in Math.ceil(count/limit)"><a v-on:click="changePage(n-1)">{{n}}</a></li>
+    <li :class="{ 'active': curr == n - 1 }" v-for="n in Math.ceil(count/limit)"><a v-on:click="changePage(n-1)">{{n}}</a></li>
   </ul>
 </nav>
 

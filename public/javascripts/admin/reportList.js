@@ -35,8 +35,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 });
             },
             changePage: function(index) {
-                this.curr = this.index;
-                search(false);
+                this.curr = index;
+                app.search(false);
             },
             dismiss: function() {
                 notice = false;
