@@ -1,4 +1,4 @@
 {
-    "db": "/home/zhen/code/data/db.file",
+    "db": "/data/db.file",
     "resource": "http://gdrobot.moevis.cc"
 }
